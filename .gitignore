@@ -7,3 +7,5 @@ wheels/
 .venv
 .python-version
 .idea/
+_postgres/
+.env*

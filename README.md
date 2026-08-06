@@ -1,0 +1,1 @@
+# installbiz-analyzer

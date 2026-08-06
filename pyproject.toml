@@ -8,3 +8,43 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
+
+[dependency-groups]
+dev = [
+    "mypy==2.3.0",
+    "ruff==0.16.1",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "RUF001",  # ambiguous-unicode-character-string
+    "RUF002",
+    "D212",
+    "D213",  # multi-line-summary-first-line
+    "D203",  # incorrect-blank-line-before-class
+    "D205",
+    "CPY001",  # missing-copyright-notice
+    "FBT001",  # boolean-typed-positional-argument
+]
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "single"
+
+[tool.ruff.lint.pylint]
+max-args = 6
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+
+[[tool.mypy.overrides]]
+module = "alembic.*"
+ignore_missing_imports = true

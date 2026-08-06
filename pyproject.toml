@@ -1,0 +1,10 @@
+[project]
+name = "installbiz-analyzer"
+authors = [
+    {name = "Mary-Ku", email="maryku4815@gmail.com"}
+]
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []

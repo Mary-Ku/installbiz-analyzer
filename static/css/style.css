@@ -19,11 +19,25 @@
     align-items: center;
 }
 
+#download-btn {
+    width: 40%;
+}
+
 /* Индикатор прогресса скачивания */
-#download-status {
+#download-status,
+#download-message,
+#db-count {
     color: #666;
     font-size: 0.9em;
+}
+
+#download-status {
     margin-left: 1rem;
+}
+
+#download-message,
+#db-count {
+    display: block;
 }
 
 #download-status.running {

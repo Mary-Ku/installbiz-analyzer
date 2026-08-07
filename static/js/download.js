@@ -3,6 +3,8 @@
 
 const downloadBtn = document.getElementById('download-btn');
 const statusEl = document.getElementById('download-status');
+const messageEl = document.getElementById('download-message');
+const dbCountEl = document.getElementById('db-count');
 
 const POLL_INTERVAL_MS = 1500;
 
@@ -28,23 +30,23 @@ function formatNskTime(isoString) {
     });
 }
 
-// Отображает текущий статус и количество файлов в базе
+// Отображает текущий статус, итоговое сообщение и количество файлов в базе
 function renderStatus(status) {
     statusEl.classList.toggle('running', status.is_running);
-
-    const filesInDbText = ` Файлов в базе: ${status.files_in_db}.`;
+    dbCountEl.textContent = `Файлов в базе: ${status.files_in_db}.`;
 
     if (status.is_running) {
         const startedAt = formatNskTime(status.started_at);
         statusEl.textContent =
             `Старт в ${startedAt} по НСК. ` +
             `Получено ${status.received_names} названий, ` +
-            `скачано ${status.downloaded_files} из ${status.received_names}.` +
-            filesInDbText;
+            `скачано ${status.downloaded_files} из ${status.received_names}.`;
+        messageEl.textContent = '';
         return;
     }
 
-    statusEl.textContent = (status.message || 'Скачивание не запущено.') + filesInDbText;
+    statusEl.textContent = '';
+    messageEl.textContent = status.message || 'Скачивание не запущено.';
 }
 
 // Узнаёт эндпоинт статуса, останавливает polling по завершении процесса

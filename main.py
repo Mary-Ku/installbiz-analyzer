@@ -60,5 +60,11 @@ async def home_page(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(request=request, name='index.html')
 
 
+@app.get('/files', response_class=HTMLResponse)
+async def files_page(request: Request) -> HTMLResponse:
+    """Страница скачанных файлов и расчётов."""
+    return templates.TemplateResponse(request=request, name='files.html')
+
+
 if __name__ == '__main__':
     uvicorn.run('main:app', host=settings.HTTP_HOST, port=settings.HTTP_PORT)

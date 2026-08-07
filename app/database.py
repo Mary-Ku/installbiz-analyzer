@@ -80,11 +80,17 @@ class FileDAO:
         res = await self._session.execute(query)
         return res.scalars().all(), await self.count()
 
-    async def get_by_ids(self, file_ids: list[int] | None) -> Sequence[File]:
-        """Возвращает файлы по списку id или все файлы, если список не передан."""
+    async def get_by_ids(
+        self,
+        file_ids: list[int] | None,
+        exclude_ids: list[int] | None = None,
+    ) -> Sequence[File]:
+        """Возвращает файлы по списку id или все (кроме exclude_ids), если список не передан."""
         query = select(File).order_by(File.id)
         if file_ids is not None:
             query = query.where(File.id.in_(file_ids))
+        if exclude_ids:
+            query = query.where(File.id.notin_(exclude_ids))
         res = await self._session.execute(query)
         return res.scalars().all()
 

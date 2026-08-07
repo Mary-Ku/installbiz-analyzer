@@ -16,22 +16,17 @@
                 <nav class="site-nav">
                     <ul>
                         <li><strong><a href="/">InstallBiz Analyzer</a></strong></li>
+                        <li><a href="/files">Файлы</a></li>
                     </ul>
                 </nav>
 
-                <!-- Кнопка загрузки и индикатор доступны на любой странице -->
-                <div class="download-controls">
-                    <button id="download-btn" class="outline small">
-                        Загрузить данные
-                    </button>
-                    <span id="download-status"></span>
-                </div>
+                <!-- Кнопка загрузки и индикатор только на странице загрузки -->
+                {% block download_controls %}{% endblock %}
             </header>
 
             {% block content %}{% endblock %}
         </main>
 
-        <script src="/static/js/download.js"></script>
         {% block scripts %}{% endblock %}
     </body>
 </html>

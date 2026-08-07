@@ -2,7 +2,7 @@
 
 from datetime import UTC, datetime
 
-from sqlalchemy import DateTime, Integer, Text, insert, select
+from sqlalchemy import DateTime, Integer, Text, func, insert, select
 from sqlalchemy.ext.asyncio import (
     AsyncAttrs,
     AsyncSession,
@@ -49,6 +49,12 @@ class FileDAO:
     def __init__(self, session: AsyncSession) -> None:
         """Сохраняет объект асинхронной сессии."""
         self._session = session
+
+    async def count(self) -> int:
+        """Возвращает количество файлов в базе."""
+        query = select(func.count()).select_from(File)
+        res = await self._session.execute(query)
+        return res.scalar_one()
 
     async def get_existing_names(self, names: list[str]) -> set[str]:
         """Возвращает имена файлов, которые уже сохранены в базе."""

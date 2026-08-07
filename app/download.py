@@ -15,7 +15,7 @@ from pydantic import BaseModel
 
 from app.config import LOGGER, settings
 from app.database import FileDAO, async_session_maker
-from app.exceptions import RequestFailedError
+from app.exceptions import NoDownloadProgressError, RequestFailedError
 from app.utils import DEFAULT_RETRY_DELAY, retry_request
 
 _DOWNLOAD_BATCH_SIZE = 3
@@ -30,6 +30,7 @@ class DownloadStatusResponse(BaseModel):
     started_at: datetime | None = None
     received_names: int = 0
     downloaded_files: int = 0
+    files_in_db: int = 0
     message: str | None = None
 
 
@@ -154,10 +155,15 @@ class DownloadService:
                 )
             else:
                 self._status.message = 'Процесс остановлен из-за ошибки, подробности в логах.'
-            LOGGER.warning('Скачивание остановлено: %s (%s)', self._status.message, exc)
+            LOGGER.warning('%s (%s)', self._status.message, exc)
+        except NoDownloadProgressError:
+            self._status.message = (
+                'Внешний API не возвращает содержимое запрошенных файлов. Процесс остановлен.'
+            )
+            LOGGER.warning(self._status.message)
         else:
             self._status.message = 'Каталог скачан полностью.'
-            LOGGER.info('Скачивание завершено: %s файлов', self._status.downloaded_files)
+            LOGGER.info('Загрузка завершена: получено %s файлов', self._status.downloaded_files)
 
         self._status.is_running = False
 
@@ -183,10 +189,8 @@ class DownloadService:
                     handled_count += marked_count
 
                 if handled_count == 0:
-                    # Ни один файл не сохранен и не отмечен: API не отдает
-                    # содержимое, дальнейшие циклы ничего не изменят
-                    msg = 'Внешний API не возвращает содержимое запрошенных файлов.'
-                    raise RuntimeError(msg)
+                    # Ни один файл не сохранён и не отмечен: API не отдаёт содержимое
+                    raise NoDownloadProgressError
 
     async def _download_batch(
         self,
@@ -254,4 +258,6 @@ async def start_download_endpoint() -> JSONResponse:
 @router.get('/status')
 async def get_download_status_endpoint() -> DownloadStatusResponse:
     """Возвращает текущее состояние процесса скачивания."""
-    return download_service.status
+    async with async_session_maker() as session:
+        files_in_db = await FileDAO(session).count()
+    return download_service.status.model_copy(update={'files_in_db': files_in_db})

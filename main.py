@@ -10,11 +10,11 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from app.analyzer.files import router as files_router
+from app.analyzer.stats import router as stats_router
 from app.config import settings
-from app.download import download_service
-from app.download import router as download_router
-from app.files import router as files_router
-from app.stats import router as stats_router
+from app.download.routes import download_service
+from app.download.routes import router as download_router
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -46,7 +46,13 @@ async def no_cache_static(
     return response
 
 
-templates = Jinja2Templates(directory=BASE_DIR / 'app' / 'templates')
+templates = Jinja2Templates(
+    directory=[
+        BASE_DIR / 'app' / 'templates',
+        BASE_DIR / 'app' / 'download' / 'templates',
+        BASE_DIR / 'app' / 'analyzer' / 'templates',
+    ],
+)
 
 app.include_router(download_router, prefix='/api/download')
 app.include_router(files_router, prefix='/api/files')

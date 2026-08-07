@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}InstallBiz Analyzer — Файлы{% endblock %}
+
+{% block content %}
+<h2>Скачанные файлы</h2>
+
+<div class="files-layout">
+    <div class="files-main">
+        <!-- ТАБЛИЦА ФАЙЛОВ -->
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Имя файла</th>
+                    <th>Время скачивания (НСК)</th>
+                </tr>
+            </thead>
+            <tbody id="files-tbody">
+                <tr>
+                    <td colspan="3" class="empty-cell">Загрузка файлов...</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ПАГИНАЦИЯ -->
+        <div class="pagination-bar">
+            <button id="prev-page-btn" class="page-arrow" title="Предыдущая страница">←</button>
+            <span id="page-info"></span>
+            <button id="next-page-btn" class="page-arrow" title="Следующая страница">→</button>
+        </div>
+    </div>
+
+    <!-- ПАНЕЛЬ ВЫБОРА И СОРТИРОВКИ -->
+    <aside class="files-sidebar">
+        <button id="select-all-btn" class="outline small">Выбрать все файлы</button>
+        <button id="reset-selection-btn" class="outline small">Сбросить выбор</button>
+        <button id="sort-btn" class="outline small">Сортировка: сначала новые</button>
+        <button id="calc-btn" class="small">Произвести расчёты</button>
+        <span id="selection-info"></span>
+        <span id="total-info"></span>
+    </aside>
+</div>
+
+<!-- ВСПЛЫВАЮЩЕЕ ОКНО С РЕЗУЛЬТАТОМ РАСЧЁТОВ -->
+<dialog id="stats-dialog">
+    <article>
+        <div id="stats-container"></div>
+        <footer>
+            <button id="stats-close-btn" class="outline small">Закрыть</button>
+        </footer>
+    </article>
+</dialog>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/files.js"></script>
+{% endblock %}

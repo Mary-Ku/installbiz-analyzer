@@ -2,6 +2,15 @@
 
 {% block title %}InstallBiz Analyzer — Скачивание файлов{% endblock %}
 
+{% block download_controls %}
+<div class="download-controls">
+    <button id="download-btn" class="outline small">
+        Загрузить данные
+    </button>
+    <span id="download-status"></span>
+</div>
+{% endblock %}
+
 {% block content %}
 <h2>Загрузка каталога</h2>
 <p>
@@ -9,4 +18,8 @@
     <br>Прогресс отображается рядом с кнопкой.
 </p>
 
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/download.js"></script>
 {% endblock %}

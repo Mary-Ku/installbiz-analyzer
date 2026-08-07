@@ -2,7 +2,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+}
+
+/* Боковые отступы уже, чем по умолчанию в Pico */
+.container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 .site-nav {
@@ -23,4 +28,102 @@
 
 #download-status.running {
     color: #009879;
+}
+
+/* Страница файлов */
+.files-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.files-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.files-sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.files-sidebar button {
+    padding: 0.35rem 0.6rem;
+    margin: 0 0 0.5rem;
+    font-size: 0.85rem;
+}
+
+.pagination-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Стрелки пагинации без оформления кнопок */
+.page-arrow {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: var(--primary, #333);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.page-arrow:hover:not(:disabled) {
+    color: #009879;
+}
+
+.page-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+#selection-info,
+#total-info {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.empty-cell {
+    color: #666;
+    font-style: italic;
+}
+
+/* Таблица статистики по цифрам */
+#stats-dialog article {
+    max-width: 90vw;
+}
+
+#stats-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+#stats-container table {
+    font-size: 0.85em;
+}
+
+#stats-container td,
+#stats-container th {
+    text-align: center;
+}
+
+.stats-table-wrapper {
+    overflow-x: auto;
+    max-height: 60vh;
+}
+
+.stats-total-row {
+    font-weight: bold;
+}
+
+.stats-total-row td {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #f4f4f4;
+}
+
+.stats-error {
+    color: #c00;
 }

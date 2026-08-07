@@ -15,9 +15,10 @@ _DIGITS = tuple('0123456789')
 
 
 class StatsRequest(BaseModel):
-    """Схема запроса расчёта статистики (file_ids=None — все файлы)."""
+    """Схема запроса расчёта статистики (file_ids=None — все файлы, кроме exclude_ids)."""
 
     file_ids: list[int] | None = None
+    exclude_ids: list[int] = []
 
 
 class FileStats(BaseModel):
@@ -64,5 +65,8 @@ async def calculate_stats_endpoint(
     session: Annotated[AsyncSession, Depends(get_session)],
 ) -> StatsResponse:
     """Производит расчёт статистики по выбранным файлам (или по всем)."""
-    files = await FileDAO(session).get_by_ids(stats_request.file_ids)
+    files = await FileDAO(session).get_by_ids(
+        stats_request.file_ids,
+        stats_request.exclude_ids,
+    )
     return calculate_stats(files)

@@ -1,0 +1,9 @@
+.git
+.idea
+.venv
+.env
+_postgres
+__pycache__
+.mypy_cache
+.ruff_cache
+*.pyc

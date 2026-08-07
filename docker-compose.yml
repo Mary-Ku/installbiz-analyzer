@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:17
+    container_name: installbiz_analyzer_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: installbiz_analyzer
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  app:
+    build: .
+    container_name: installbiz_analyzer_app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      HTTP_HOST: 0.0.0.0
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB_NAME: installbiz_analyzer
+      CANDIDATE_ID: any_user
+    depends_on:
+      db:
+        condition: service_healthy

@@ -1,0 +1,26 @@
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.site-nav {
+    margin: 0;
+}
+
+.download-controls {
+    display: flex;
+    align-items: center;
+}
+
+/* Индикатор прогресса скачивания */
+#download-status {
+    color: #666;
+    font-size: 0.9em;
+    margin-left: 1rem;
+}
+
+#download-status.running {
+    color: #009879;
+}

@@ -1,6 +1,10 @@
 """Содержит классы исключений приложения InstallBiz Analyzer."""
 
 
+class NoDownloadProgressError(Exception):
+    """Внешний API не возвращает содержимое запрошенных файлов."""
+
+
 class RequestFailedError(Exception):
     """Запрос к внешнему API завершился ошибкой."""
 

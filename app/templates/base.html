@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{% block title %}InstallBiz Analyzer{% endblock %}</title>
+
+        <link rel="stylesheet" href="/static/css/pico.min.css" />
+        <link rel="stylesheet" href="/static/css/style.css" />
+        {% block styles %}{% endblock %}
+    </head>
+    <body>
+        <main class="container">
+            <!-- ШАПКА САЙТА -->
+            <header class="site-header">
+                <nav class="site-nav">
+                    <ul>
+                        <li><strong><a href="/">InstallBiz Analyzer</a></strong></li>
+                    </ul>
+                </nav>
+
+                <!-- Кнопка загрузки и индикатор доступны на любой странице -->
+                <div class="download-controls">
+                    <button id="download-btn" class="outline small">
+                        Загрузить данные
+                    </button>
+                    <span id="download-status"></span>
+                </div>
+            </header>
+
+            {% block content %}{% endblock %}
+        </main>
+
+        <script src="/static/js/download.js"></script>
+        {% block scripts %}{% endblock %}
+    </body>
+</html>

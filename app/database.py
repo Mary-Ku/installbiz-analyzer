@@ -1,5 +1,6 @@
 """Модуль слоя доступа к данным."""
 
+from collections.abc import AsyncGenerator, Sequence
 from datetime import UTC, datetime
 
 from sqlalchemy import DateTime, Integer, Text, func, insert, select
@@ -43,6 +44,12 @@ class File(Base):
     downloaded_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+async def get_session() -> AsyncGenerator[AsyncSession]:
+    """Возвращает асинхронную сессию базы данных."""
+    async with async_session_maker() as session:
+        yield session
+
+
 class FileDAO:
     """Класс для работы с файлами в SQLAlchemy."""
 
@@ -55,6 +62,31 @@ class FileDAO:
         query = select(func.count()).select_from(File)
         res = await self._session.execute(query)
         return res.scalar_one()
+
+    async def get_page(
+        self,
+        page: int,
+        per_page: int,
+        newest_first: bool,
+    ) -> tuple[Sequence[File], int]:
+        """Возвращает страницу файлов и их общее количество."""
+        order_column = File.downloaded_at.desc() if newest_first else File.downloaded_at.asc()
+        query = (
+            select(File)
+            .order_by(order_column, File.id)
+            .offset((page - 1) * per_page)
+            .limit(per_page)
+        )
+        res = await self._session.execute(query)
+        return res.scalars().all(), await self.count()
+
+    async def get_by_ids(self, file_ids: list[int] | None) -> Sequence[File]:
+        """Возвращает файлы по списку id или все файлы, если список не передан."""
+        query = select(File).order_by(File.id)
+        if file_ids is not None:
+            query = query.where(File.id.in_(file_ids))
+        res = await self._session.execute(query)
+        return res.scalars().all()
 
     async def get_existing_names(self, names: list[str]) -> set[str]:
         """Возвращает имена файлов, которые уже сохранены в базе."""

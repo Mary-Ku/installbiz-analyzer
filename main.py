@@ -13,6 +13,8 @@ from fastapi.templating import Jinja2Templates
 from app.config import settings
 from app.download import download_service
 from app.download import router as download_router
+from app.files import router as files_router
+from app.stats import router as stats_router
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -47,6 +49,8 @@ async def no_cache_static(
 templates = Jinja2Templates(directory=BASE_DIR / 'app' / 'templates')
 
 app.include_router(download_router, prefix='/api/download')
+app.include_router(files_router, prefix='/api/files')
+app.include_router(stats_router, prefix='/api/stats')
 app.mount('/static', StaticFiles(directory=BASE_DIR / 'static'), name='static')
 
 
